@@ -1,17 +1,15 @@
-FROM ubuntu:latest
+FROM mysql:latest
 
-# Update system packages and install required dependencies
-RUN apt-get update && \
-    apt-get install -y wget openssl && \
-    apt-get clean
+# Set environment variables for MySQL configuration
+ENV MYSQL_ROOT_PASSWORD=root
+ENV MYSQL_USER=rhsalisu
+ENV MYSQL_PASSWORD=Rabiu2004@
 
-# Install CyberPanel
-RUN wget -O installer.sh https://cyberpanel.net/install.sh && \
-    chmod +x installer.sh && \
-    bash installer.sh
+# Copy custom MySQL configuration file
+COPY my.cnf /etc/mysql/my.cnf
 
-# Expose CyberPanel ports
-EXPOSE 8090 8098 8099
+# Run additional setup scripts, if needed
+COPY setup.sql /docker-entrypoint-initdb.d/
 
-# Start CyberPanel service
-CMD ["sh", "-c", "/usr/local/CyberCP/bin/python manage.py runserver 0.0.0.0:8090"]
+# Expose MySQL port
+EXPOSE 3306
