@@ -1,15 +1,14 @@
-FROM centos:latest
+FROM ubuntu:latest
 
 # Update system packages and install required dependencies
-RUN yum -y update && \
-    yum -y install wget && \
-    yum -y install openssl && \
-    yum clean all
+RUN apt-get update && \
+    apt-get install -y wget openssl && \
+    apt-get clean
 
 # Install CyberPanel
 RUN wget -O installer.sh https://cyberpanel.net/install.sh && \
     chmod +x installer.sh && \
-    sh installer.sh
+    bash installer.sh
 
 # Expose CyberPanel ports
 EXPOSE 8090 8098 8099
