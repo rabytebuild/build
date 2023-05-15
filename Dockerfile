@@ -7,10 +7,9 @@ RUN apt-get update && \
 
 # Download aaPanel installation script
 RUN wget -O install.sh http://www.aapanel.com/script/install-ubuntu_6.0_en.sh && \
-    chmod +x install.sh && \
-    sed -i 's/bash/sh/g' install.sh
+    chmod +x install.sh
 
-# Install aaPanel without shell prompt
+# Install aaPanel
 RUN echo | ./install.sh
 
 # Expose aaPanel ports
