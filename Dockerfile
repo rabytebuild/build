@@ -1,17 +1,20 @@
 FROM ubuntu:latest
 
-# Update system packages and install required dependencies
+# Install required packages
 RUN apt-get update && \
-    apt-get install -y wget openssl && \
+    apt-get install -y wget && \
     apt-get clean
 
-# Install CyberPanel
-RUN wget -O installer.sh https://cyberpanel.net/install.sh && \
-    chmod +x installer.sh && \
-    bash installer.sh
+# Download aaPanel installation script
+RUN wget -O install.sh http://www.aapanel.com/script/install-ubuntu_6.0_en.sh && \
+    chmod +x install.sh && \
+    sed -i 's/bash/sh/g' install.sh
 
-# Expose CyberPanel ports
-EXPOSE 8090 8098 8099
+# Install aaPanel without shell prompt
+RUN echo | ./install.sh
 
-# Start CyberPanel service
-CMD ["sh", "-c", "/usr/local/CyberCP/bin/python manage.py runserver 0.0.0.0:8090"]
+# Expose aaPanel ports
+EXPOSE 8888 888 21 20 30000-30009
+
+# Start aaPanel service
+CMD ["sh", "-c", "/etc/init.d/bt start && tail -f /dev/null"]
