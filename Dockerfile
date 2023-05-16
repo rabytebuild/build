@@ -1,17 +1,30 @@
 FROM ubuntu:latest
 
-# Update system packages and install required dependencies
+# Install dependencies
 RUN apt-get update && \
-    apt-get install -y wget openssl && \
+    apt-get install -y git mysql-server php php-mysql && \
     apt-get clean
 
-# Install CyberPanel
-RUN wget -O installer.sh https://cyberpanel.net/install.sh && \
-    chmod +x installer.sh && \
-    bash installer.sh
+# Set MySQL root password
+ARG MYSQL_ROOT_PASSWORD=root
+ENV MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
 
-# Expose CyberPanel ports
-EXPOSE 8090 8098 8099
+# Set MySQL user and password
+ARG MYSQL_USER=rhsalisu
+ARG MYSQL_PASSWORD=rabiu2004@
+ENV MYSQL_USER=${MYSQL_USER}
+ENV MYSQL_PASSWORD=${MYSQL_PASSWORD}
 
-# Start CyberPanel service
-CMD ["sh", "-c", "/usr/local/CyberCP/bin/python manage.py runserver 0.0.0.0:8090"]
+# Set up MySQL configuration
+RUN sed -i 's/^bind-address.*/bind-address = 0.0.0.0/' /etc/mysql/mysql.conf.d/mysqld.cnf
+
+# Clone the PHP script from GitHub
+RUN git clone https://github.com/rabytebuild/wordpressscript.git /var/www/html
+RUN cd /var/www/html/wordpressscrip/ && \
+    mv * ..
+
+# Start MySQL service
+CMD service mysql start && tail -f /dev/null
+
+# Expose MySQL and HTTP ports
+EXPOSE 3306 80
