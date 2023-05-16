@@ -17,9 +17,6 @@ ARG MYSQL_PASSWORD=rabiu2004@
 ENV MYSQL_USER=${MYSQL_USER}
 ENV MYSQL_PASSWORD=${MYSQL_PASSWORD}
 
-# Set up MySQL configuration
-RUN sed -i 's/^bind-address.*/bind-address = 0.0.0.0/' /etc/mysql/mysql.conf.d/mysqld.cnf
-
 # Clone the PHP script from GitHub
 RUN git clone https://github.com/rabytebuild/wordpressscript.git /var/www/html
 RUN cd /var/www/html/wordpressscrip/ && \
