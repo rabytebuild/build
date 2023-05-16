@@ -15,6 +15,10 @@ ARG MYSQL_PASSWORD=rabiu2004@
 ENV MYSQL_USER=${MYSQL_USER}
 ENV MYSQL_PASSWORD=${MYSQL_PASSWORD}
 
+# Set TZ Data
+ARG DEBIAN_FRONTEND=noninteractive
+ENV TZ=Europe/Moscow
+
 # Set up MySQL configuration
 RUN sed -i 's/^bind-address.*/bind-address = 0.0.0.0/' /etc/mysql/mysql.conf.d/mysqld.cnf
 
