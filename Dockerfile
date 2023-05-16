@@ -1,6 +1,8 @@
 FROM ubuntu:latest
 
 # Install dependencies
+ENV TZ=Europe/Kiev
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 RUN apt-get update && \
     apt-get install -y git mysql-server php php-mysql && \
     apt-get clean
@@ -14,10 +16,6 @@ ARG MYSQL_USER=rhsalisu
 ARG MYSQL_PASSWORD=rabiu2004@
 ENV MYSQL_USER=${MYSQL_USER}
 ENV MYSQL_PASSWORD=${MYSQL_PASSWORD}
-
-# Set TZ Data
-ARG DEBIAN_FRONTEND=noninteractive
-ENV TZ=Europe/Moscow
 
 # Set up MySQL configuration
 RUN sed -i 's/^bind-address.*/bind-address = 0.0.0.0/' /etc/mysql/mysql.conf.d/mysqld.cnf
